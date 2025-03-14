@@ -46,7 +46,16 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// Route pour récupérer tous les messages : evan
+
+app.get('/logs', async (req, res) => {
+  try {
+    
+    const messages = await Message.find();
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(500).json({ error: "Erreur lors de la récupération des logs" });
+  }
+});
 
 // Route pour supprimer un message par ID ; soufiane
 

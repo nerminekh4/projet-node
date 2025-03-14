@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat en ligne</title>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #chat-container { display: none; }
+    </style>
+</head>
+<body>
+
+    <div id="name-container">
+        <h2>Bienvenue sur le chat</h2>
+        <input id="username" type="text" placeholder="Entrez votre nom" />
+        <button onclick="setUsername()">Entrer</button>
+    </div>
+
+    <div id="chat-container">
+        <h2>Chat en ligne</h2>
+        <ul id="messages"></ul>
+        <input id="message" type="text" placeholder="Tapez votre message..." />
+        <button onclick="sendMessage()">Envoyer</button>
+    </div>
+
+    <script>
+        const socket = io();
+        let username = "";
+
+        function setUsername() {
+            const inputName = document.getElementById("username").value;
+            if (inputName.trim() !== "") {
+                username = inputName;
+                document.getElementById("name-container").style.display = "none";
+                document.getElementById("chat-container").style.display = "block";
+            } else {
+                alert("Veuillez entrer un nom !");
+            }
+        }
+
+        socket.on("message", (data) => {
+            const li = document.createElement("li");
+            li.textContent = `${data.name}: ${data.message}`;
+            document.getElementById("messages").appendChild(li);
+        });
+
+        function sendMessage() {
+            const message = document.getElementById("message").value;
+            if (message.trim() !== "") {
+                const date = new Date().toLocaleDateString();
+                const heure = new Date().toLocaleTimeString();
+
+                socket.emit("message", { name: username, message, date, heure });
+                document.getElementById("message").value = "";
+            }
+        }
+    </script>
+
+</body>
+</html>
