@@ -59,7 +59,7 @@ app.get('/logs', async (req, res) => {
 
 // Route pour supprimer un message par ID ; soufiane
 
-// Gestion des connexions WebSocket: mustapha
+
  io.on("connection", (socket) => {
   console.log("Un utilisateur connecté");
 
