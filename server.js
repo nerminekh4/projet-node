@@ -57,10 +57,26 @@ app.get('/logs', async (req, res) => {
   }
 });
 
-// Route pour supprimer un message par ID ; soufiane
+app.delete("/logs/:id", async (req, res) => {
+  await Message.findByIdAndDelete(req.params.id);
+  res.json({ message: "Log supprimé" });
+});
 
-// Gestion des connexions WebSocket: mustapha
-nn
+io.on("connection", (socket) => {
+  console.log("Un utilisateur connecté");
+
+  socket.on("message", async (data) => {
+    const nextId = await getNextSequence("messages");
+    const newMessage = new Message({ ...data, id: nextId });
+  
+    await newMessage.save();
+    io.emit("message", newMessage);
+  });
+  
+  socket.on("disconnect", () => {
+    console.log("Un utilisateur déconnecté");
+  });
+});
 
 const PORT = 3000;
 server.listen(PORT, () => {
