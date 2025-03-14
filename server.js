@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Route pour récupérer tous les messages : evan
 app.get('/logs', async (req, res) => {
   try {
-    // Récupérer TOUS les messages depuis MongoDB
+    
     const messages = await Message.find();
     res.status(200).json(messages);
   } catch (error) {
