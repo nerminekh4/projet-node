@@ -60,7 +60,24 @@ app.get('/logs', async (req, res) => {
 // Route pour supprimer un message par ID ; soufiane
 
 // Gestion des connexions WebSocket: mustapha
-nn
+io.on('connection', (socket) => {
+  console.log('Un utilisateur est connecté');
+
+  // Écouter les messages envoyés par l'utilisateur
+  socket.on('chat_message', async (data) => {
+    // Sauvegarder le message dans MongoDB
+    const message = new Message(data);
+    await message.save();
+
+    // Diffuser le message à tous les clients connectés
+    io.emit('chat_message', data);
+  });
+
+  // Déconnexion
+  socket.on('disconnect', () => {
+    console.log('Un utilisateur est déconnecté');
+  });
+});
 
 const PORT = 3000;
 server.listen(PORT, () => {
