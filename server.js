@@ -80,6 +80,9 @@ io.on("connection", (socket) => {
 });
 
 const PORT = 3000;
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 server.listen(PORT, () => {
   console.log(`Serveur en écoute sur http://localhost:${PORT}`);
 });
