@@ -62,6 +62,7 @@ app.delete("/logs/:id", async (req, res) => {
   res.json({ message: "Log supprimé" });
 });
 
+
 io.on("connection", (socket) => {
   console.log("Un utilisateur connecté");
 
